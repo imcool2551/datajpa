@@ -117,4 +117,29 @@ class MemberRepositoryTest {
             System.out.println("dto = " + dto);
         }
     }
+
+    @Test
+    void findByNames() {
+
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findByNames(List.of("AAA", "BBB"));
+        assertThat(result).containsExactly(m1, m2);
+    }
+
+    @Test
+    void returnTypes() {
+
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        assertThat(memberRepository.findListByUsername("asdfasdf")).isEmpty();
+        assertThat(memberRepository.findMemberByUsername("asdfasdf")).isNull();
+        memberRepository.findOptionalByUsername("AAA");
+    }
 }

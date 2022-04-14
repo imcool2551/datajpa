@@ -6,7 +6,9 @@ import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
@@ -25,4 +27,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select new study.datajpa.dto.MemberDto(m.id, m.username, t.name) from Member m join m.team t")
     List<MemberDto> findMemberDto();
+
+    @Query("select m from Member m where m.username in :names")
+    List<Member> findByNames(@Param("names") Collection<String> names);
+
+    // 다양한 리턴 타입 (리스트, 단건, 옵셔널 등등 매우 다양)
+    List<Member> findListByUsername(String username); // 데이터 없으면 빈 컬렉션
+    Member findMemberByUsername(String username); // 데이터 없으면 null (스프링 데이터 JPA가 중간에서 예외를 잡아서 동작 방식 변경)
+    Optional<Member> findOptionalByUsername(String username); // 단건 조회시 데이터가 2건 이상이면 예외
 }

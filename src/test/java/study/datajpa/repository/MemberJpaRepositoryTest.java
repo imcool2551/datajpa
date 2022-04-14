@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberJpaRepositoryTest {
 
     @Autowired
-    MemberJpaRepository memberJpaRepository;
+    MemberJpaRepository memberRepository;
 
     @Test
     void testMember() {
         Member member = new Member("memberA");
 
-        memberJpaRepository.save(member);
-        Member findMember = memberJpaRepository.find(member.getId());
+        memberRepository.save(member);
+        Member findMember = memberRepository.find(member.getId());
 
         assertThat(findMember).isEqualTo(member);
     }
@@ -33,25 +33,25 @@ class MemberJpaRepositoryTest {
     void basicCRUD() {
         Member member1 = new Member("member1");
         Member member2 = new Member("member2");
-        memberJpaRepository.save(member1);
-        memberJpaRepository.save(member2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
-        Member findMember1 = memberJpaRepository.findById(member1.getId()).get();
-        Member findMember2 = memberJpaRepository.findById(member2.getId()).get();
+        Member findMember1 = memberRepository.findById(member1.getId()).get();
+        Member findMember2 = memberRepository.findById(member2.getId()).get();
 
         assertThat(findMember1).isEqualTo(member1);
         assertThat(findMember2).isEqualTo(member2);
 
-        List<Member> all = memberJpaRepository.findAll();
+        List<Member> all = memberRepository.findAll();
         assertThat(all).hasSize(2);
 
-        long count = memberJpaRepository.count();
+        long count = memberRepository.count();
         assertThat(count).isEqualTo(2);
 
-        memberJpaRepository.delete(member1);
-        memberJpaRepository.delete(member2);
+        memberRepository.delete(member1);
+        memberRepository.delete(member2);
 
-        long deletedCount = memberJpaRepository.count();
+        long deletedCount = memberRepository.count();
         assertThat(deletedCount).isEqualTo(0);
     }
 
@@ -59,10 +59,10 @@ class MemberJpaRepositoryTest {
     void findByUsernameAndAgeGreaterThan() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("AAA", 20);
-        memberJpaRepository.save(m1);
-        memberJpaRepository.save(m2);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
 
-        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("AAA", 15);
+        List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("AAA", 15);
         assertThat(result.get(0).getUsername()).isEqualTo("AAA");
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result).hasSize(1);
@@ -72,10 +72,10 @@ class MemberJpaRepositoryTest {
     void testNamedQuery() {
         Member m1 = new Member("AAA", 10);
         Member m2 = new Member("BBB", 20);
-        memberJpaRepository.save(m1);
-        memberJpaRepository.save(m2);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
 
-        List<Member> result = memberJpaRepository.findByUsername("AAA");
+        List<Member> result = memberRepository.findByUsername("AAA");
         assertThat(result.get(0)).isEqualTo(m1);
     }
 }

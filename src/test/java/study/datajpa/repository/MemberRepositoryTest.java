@@ -190,4 +190,39 @@ class MemberRepositoryTest {
         assertThat(resultCount).isEqualTo(3);
     }
 
+    @Test
+    void findMemberFetchJoin() {
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member memberA = new Member("memberA", 10, teamA);
+        Member memberB = new Member("memberB", 10, teamB);
+        memberRepository.save(memberA);
+        memberRepository.save(memberB);
+
+        em.flush();
+        em.clear();
+
+        List<Member> members = memberRepository.findMemberFetchJoin();
+    }
+
+    @Test
+    void entityGraph() {
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member memberA = new Member("memberA", 10, teamA);
+        Member memberB = new Member("memberB", 10, teamB);
+        memberRepository.save(memberA);
+        memberRepository.save(memberB);
+
+        em.flush();
+        em.clear();
+
+        memberRepository.findEntityGraphByUsername("memberA");
+    }
 }
